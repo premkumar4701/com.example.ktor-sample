@@ -13,5 +13,6 @@ data class AssetDataRequest(
 
 @Serializable
 data class AssetDataList(
-    val assetList: List<AssetDataRequest>
+    val assetList: List<AssetDataRequest>,
+    val isEmptyLocalDataSync: Boolean
 )

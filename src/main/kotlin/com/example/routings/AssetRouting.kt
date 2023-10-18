@@ -14,11 +14,16 @@ fun Application.assetRouting(dao: AssetDao){
         authenticate("auth-session") {
             post("/postAssetData"){
                 val assetRequestList = call.receive<AssetDataList>()
-                var result = PostAssetDataResult(response = false,isValidRequest = true)
-                assetRequestList.assetList.forEach { assetRequest ->
-                    result = dao.postAssetData(assetRequest)
+                lateinit var result : PostAssetDataResult
+                if (assetRequestList.isEmptyLocalDataSync){
+                    result = PostAssetDataResult(response = true,isValidRequest = true)
+                    call.respond(result)
+                }else {
+                    assetRequestList.assetList.forEach { assetRequest ->
+                        result = dao.postAssetData(assetRequest)
+                    }
+                    call.respond(result)
                 }
-                call.respond(result)
             }
         }
 
